@@ -19,8 +19,7 @@
   --code-bg:#0d1117; --sidebar-w:260px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);font-size:15px;line-height:1.7;display:flex;min-height:100vh;user-select:none;}
-pre, pre * { user-select:text; }
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);font-size:15px;line-height:1.7;display:flex;min-height:100vh;}
 
 .sidebar{width:var(--sidebar-w);flex-shrink:0;position:fixed;top:0;left:0;bottom:0;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:24px 0 40px;display:flex;flex-direction:column;}
 .sidebar-brand{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:16px;}
@@ -216,13 +215,49 @@ code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surf
 
     <div class="step-list">
       <div class="step-item"><div class="step-num">1</div><div class="step-body">
-        <p>En <code>src/App.jsx</code>, debajo del navbar del Paso 5 de la guía, agregar este bloque:</p>
-        <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend-react/src/App.jsx</span><span class="code-tag green">agregar</span></div><pre>&lt;<span class="f">div</span> <span class="n">className</span>=<span class="s">"flex flex-col gap-2 p-4 rounded-xl shadow-md max-w-xs"</span>&gt;
-  &lt;<span class="f">img</span> <span class="n">src</span>=<span class="s">"https://placehold.co/300x200"</span> <span class="n">className</span>=<span class="s">"rounded-lg"</span> /&gt;
-  &lt;<span class="f">h3</span> <span class="n">className</span>=<span class="s">"font-bold text-lg"</span>&gt;Mouse Inalámbrico&lt;/<span class="f">h3</span>&gt;
-  &lt;<span class="f">p</span> <span class="n">className</span>=<span class="s">"text-verde font-extrabold"</span>&gt;$89.900&lt;/<span class="f">p</span>&gt;
-&lt;/<span class="f">div</span>&gt;</pre></div>
-        <div class="callout ok"><span class="callout-icon">✅</span><span><strong>Cómo verificar:</strong> debe verse una tarjeta con esquinas redondeadas, sombra suave, la imagen arriba, el título en negrita y el precio en verde SENA debajo — todo apilado en columna, con separación uniforme entre elementos (<code>gap-2</code>).</span></div>
+        <p>El <code>App.jsx</code> del Paso 5 de la guía devuelve <strong>un solo elemento</strong> — el <code>&lt;nav&gt;</code> — dentro del <code>return (...)</code>. React no permite devolver dos elementos sueltos uno al lado del otro, así que para agregar la tarjeta <strong>debajo</strong> del navbar hay que envolver ambos en un <em>fragment</em> (<code>&lt;&gt;...&lt;/&gt;</code>), una etiqueta especial que agrupa sin agregar HTML real.</p>
+
+        <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend-react/src/App.jsx</span><span class="code-tag yellow">antes (Paso 5 de la guía)</span></div><pre><span class="k">function</span> <span class="f">App</span>() {
+  <span class="k">return</span> (
+    &lt;<span class="f">nav</span> <span class="n">className</span>=<span class="s">"..."</span>&gt;
+      ...
+    &lt;/<span class="f">nav</span>&gt;
+  )
+}</pre></div>
+
+        <p style="color:var(--txt-dim);font-size:14px;margin:14px 0 6px;">Ahora en <code>src/App.jsx</code>, envolver el <code>&lt;nav&gt;</code> en <code>&lt;&gt;...&lt;/&gt;</code> y agregar la tarjeta justo debajo, <strong>dentro del mismo fragment, pero fuera del <code>&lt;nav&gt;</code></strong> (después de su etiqueta de cierre):</p>
+
+        <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend-react/src/App.jsx</span><span class="code-tag green">reemplazar todo</span></div><pre><span class="k">function</span> <span class="f">App</span>() {
+  <span class="k">return</span> (
+    <span class="edit">&lt;&gt;</span>
+      &lt;<span class="f">nav</span> <span class="n">className</span>=<span class="s">"flex items-center justify-between px-8 py-4 bg-white border-b border-slate-200"</span>&gt;
+        &lt;<span class="f">div</span> <span class="n">className</span>=<span class="s">"text-xl font-extrabold text-verde"</span>&gt;
+          TechStore <span class="k">Pro</span>
+        &lt;/<span class="f">div</span>&gt;
+        &lt;<span class="f">ul</span> <span class="n">className</span>=<span class="s">"flex gap-6 text-sm font-semibold text-texto-dim"</span>&gt;
+          &lt;<span class="f">li</span>&gt;Inicio&lt;/<span class="f">li</span>&gt;
+          &lt;<span class="f">li</span>&gt;Productos&lt;/<span class="f">li</span>&gt;
+          &lt;<span class="f">li</span>&gt;Nosotros&lt;/<span class="f">li</span>&gt;
+          &lt;<span class="f">li</span>&gt;Contacto&lt;/<span class="f">li</span>&gt;
+        &lt;/<span class="f">ul</span>&gt;
+        &lt;<span class="f">button</span> <span class="n">className</span>=<span class="s">"bg-verde text-white py-2 px-5 rounded-lg font-bold text-sm"</span>&gt;
+          Ingresar
+        &lt;/<span class="f">button</span>&gt;
+      &lt;/<span class="f">nav</span>&gt;
+
+      <span class="edit">&lt;div className="flex flex-col gap-2 p-4 rounded-xl shadow-md max-w-xs"&gt;
+        &lt;img src="https://placehold.co/300x200" className="rounded-lg" /&gt;
+        &lt;h3 className="font-bold text-lg"&gt;Mouse Inalámbrico&lt;/h3&gt;
+        &lt;p className="text-verde font-extrabold"&gt;$89.900&lt;/p&gt;
+      &lt;/div&gt;</span>
+    <span class="edit">&lt;/&gt;</span>
+  )
+}
+
+<span class="k">export default</span> App</pre></div>
+
+        <div class="callout warn"><span class="callout-icon">⚠️</span><span><strong>Ojo con las etiquetas:</strong> <code>&lt;&gt;</code> abre el fragment, <code>&lt;/&gt;</code> lo cierra — van justo antes de <code>&lt;nav&gt;</code> y justo después de <code>&lt;/div&gt;</code> de la tarjeta. Si el navbar sigue apareciendo solo, revisa que no falte ninguna de las dos.</span></div>
+        <div class="callout ok"><span class="callout-icon">✅</span><span><strong>Cómo verificar:</strong> debe verse el navbar arriba, y debajo una tarjeta con esquinas redondeadas, sombra suave, la imagen arriba, el título en negrita y el precio en verde SENA — todo apilado en columna, con separación uniforme entre elementos (<code>gap-2</code>).</span></div>
         <div class="callout info"><span class="callout-icon">💡</span><span><code>gap-2</code> separa los elementos hijos de un <code>flex</code> sin necesitar <code>margin</code> en cada uno — una sola clase reemplaza tres reglas CSS distintas.</span></div>
       </div></div>
     </div>
@@ -246,10 +281,13 @@ code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surf
   <span class="n">border-color</span>: <span class="y">var(--color-primario)</span>;
 }</pre></div>
 
-        <p style="color:var(--txt-dim);font-size:14px;margin:14px 0 6px;"><strong>Ahora en Tailwind</strong> — agregar debajo de la tarjeta del Ejercicio 1:</p>
-        <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend-react/src/App.jsx</span><span class="code-tag green">agregar</span></div><pre>&lt;<span class="f">button</span> <span class="n">className</span>=<span class="s">"bg-transparent text-verde border-2 border-verde py-3 px-6 rounded-xl font-bold"</span>&gt;
-  Ver más detalles
-&lt;/<span class="f">button</span>&gt;</pre></div>
+        <p style="color:var(--txt-dim);font-size:14px;margin:14px 0 6px;"><strong>Ahora en Tailwind</strong> — en <code>src/App.jsx</code>, agregar este botón justo debajo del <code>&lt;/div&gt;</code> que cierra la tarjeta del Ejercicio 1, todavía <strong>dentro del fragment</strong> (antes del <code>&lt;/&gt;</code> final):</p>
+        <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend-react/src/App.jsx</span><span class="code-tag green">agregar</span></div><pre>      &lt;/<span class="f">div</span>&gt;  <span class="c">{/* cierre de la tarjeta del Ejercicio 1 */}</span>
+
+      <span class="edit">&lt;button className="bg-transparent text-verde border-2 border-verde py-3 px-6 rounded-xl font-bold"&gt;
+        Ver más detalles
+      &lt;/button&gt;</span>
+    &lt;/&gt;  <span class="c">{/* cierre del fragment — esta línea no se mueve */}</span></pre></div>
         <div class="callout ok"><span class="callout-icon">✅</span><span><strong>Cómo verificar:</strong> el botón debe verse con fondo transparente, texto y borde en verde SENA — el borde debe notarse claramente (<code>border-2</code>), no una línea apenas visible.</span></div>
       </div></div>
     </div>
@@ -265,11 +303,14 @@ code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surf
 
     <div class="step-list">
       <div class="step-item"><div class="step-num">1</div><div class="step-body">
-        <p>Agregar al final de <code>src/App.jsx</code>, después de todo lo demás:</p>
-        <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend-react/src/App.jsx</span><span class="code-tag green">agregar</span></div><pre>&lt;<span class="f">footer</span> <span class="n">className</span>=<span class="s">"flex justify-between items-center p-6 bg-texto text-white"</span>&gt;
-  &lt;<span class="f">p</span>&gt;© 2026 TechStore Pro&lt;/<span class="f">p</span>&gt;
-  &lt;<span class="f">p</span> <span class="n">className</span>=<span class="s">"text-sm"</span>&gt;Hecho con Tailwind CSS&lt;/<span class="f">p</span>&gt;
-&lt;/<span class="f">footer</span>&gt;</pre></div>
+        <p>En <code>src/App.jsx</code>, agregar el footer justo debajo del <code>&lt;/button&gt;</code> del Ejercicio 2 — sigue siendo <strong>dentro del fragment</strong>, antes del <code>&lt;/&gt;</code> final:</p>
+        <div class="code-wrap"><div class="code-header"><div class="code-dots"><span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span></div><span class="code-filename">frontend-react/src/App.jsx</span><span class="code-tag green">agregar</span></div><pre>      &lt;/<span class="f">button</span>&gt;  <span class="c">{/* cierre del botón del Ejercicio 2 */}</span>
+
+      <span class="edit">&lt;footer className="flex justify-between items-center p-6 bg-texto text-white"&gt;
+        &lt;p&gt;© 2026 TechStore Pro&lt;/p&gt;
+        &lt;p className="text-sm"&gt;Hecho con Tailwind CSS&lt;/p&gt;
+      &lt;/footer&gt;</span>
+    &lt;/&gt;  <span class="c">{/* cierre del fragment — esta línea no se mueve */}</span></pre></div>
         <div class="callout ok"><span class="callout-icon">✅</span><span><strong>Cómo verificar:</strong> el footer debe tener fondo oscuro (el mismo <code>--color-texto: #1a1a2e</code> del Paso 3), texto blanco, y sus dos párrafos separados a los extremos opuestos (<code>justify-between</code>) en vez de uno debajo del otro.</span></div>
         <div class="callout info"><span class="callout-icon">💡</span><span><code>justify-between</code> empuja el primer y último elemento a los extremos del contenedor <code>flex</code> — es la misma clase que usa el navbar del Paso 5 para separar el logo de los links.</span></div>
       </div></div>
@@ -305,15 +346,6 @@ code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surf
 </main>
 
 <script>
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('copy', e => { if (!e.target.closest('pre')) e.preventDefault(); });
-document.addEventListener('cut', e => { if (!e.target.closest('pre')) e.preventDefault(); });
-document.addEventListener('keydown', e => {
-  const inCode = e.target.closest && e.target.closest('pre');
-  if ((e.ctrlKey || e.metaKey) && ['s','p'].includes(e.key.toLowerCase())) e.preventDefault();
-  if ((e.ctrlKey || e.metaKey) && ['a'].includes(e.key.toLowerCase()) && !inCode) e.preventDefault();
-});
-
 const STEPS = ['ej1','ej2','ej3','checklist'];
 const KEY   = 's19-ejercicios-progress';
 
